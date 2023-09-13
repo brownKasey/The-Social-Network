@@ -5,32 +5,34 @@ const userSchema = new Schema(
   {
     username: {
       type: String,
-      unique: true,
       required: true,
+      unique: true,
       trim: true,
+      set: (username) => username.toLowerCase(),
     },
     email: {
-      type: string,
+      type: String,
+      required: true,
       unique: true,
       validate: {
+        //validates the user email using some regex
         validator: function (email) {
-          return /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/.test(v);
+          return /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/.test(email);
         },
-        message: (input) => `${input.value} is not a valid email address!`,
+        message: (input) => `${input.value} is not a valid email`,
       },
       set: (email) => email.toLowerCase(),
-      required: [true, "User email is required"],
     },
     thoughts: [
       {
-        type: Schema.Types.objectId,
-        ref: "Thought",
+        type: Schema.Types.ObjectId,
+        ref: "thoughts",
       },
     ],
     friends: [
       {
-        type: Schema.Types.objectId,
-        ref: "Friend",
+        type: Schema.Types.ObjectId,
+        ref: "user",
       },
     ],
   },
